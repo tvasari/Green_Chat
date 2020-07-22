@@ -1,24 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import Dashboard from './components/Dashboard.js';
+import { Store } from './components/Store.js';
+import Login from './components/Login.js';
+import Register from './components/Register.js';
 
-function App() {
+const App = () => {
+  /*const [users, updateUsers] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/users')
+    .then(response => {
+      console.log(response)
+      console.log(response.json())
+    })
+    .then(data => updateUsers(data))
+  });*/
+  
+  const [route, changeRoute] = useState('login');
+
+  const displayRoute = (route, changeRoute) => {
+    switch(route) {
+      case 'login':
+        return <Login changeRoute={changeRoute}/>;
+      case 'register':
+        return <Register changeRoute={changeRoute}/>;
+      case 'dashboard':
+        return(
+          <Store>
+            <Dashboard />
+          </Store>
+        ); 
+      default:
+        throw new Error();
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        displayRoute(route, changeRoute)
+      }
     </div>
   );
 }
