@@ -22,9 +22,17 @@ const App = () => {
   const displayRoute = (route, changeRoute) => {
     switch(route) {
       case 'login':
-        return <Login changeRoute={changeRoute}/>;
+        return (
+          <Store>
+            <Login changeRoute={changeRoute}/>
+          </Store>
+        );
       case 'register':
-        return <Register changeRoute={changeRoute}/>;
+        return (
+          <Store>
+            <Register changeRoute={changeRoute}/>
+          </Store>
+        );
       case 'dashboard':
         return(
           <Store>

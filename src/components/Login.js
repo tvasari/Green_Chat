@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -7,6 +8,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import HttpsIcon from '@material-ui/icons/Https';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { CTX } from './Store.js';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,9 +26,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+
 const Login = ({ changeRoute }) => {
     const classes = useStyles();
     const { root, textfield, link } = classes;
+
+    const { userData, setInputValues, fetchUser } = useContext(CTX);
 
     return(
         <Paper className={root} elevation={3}>
@@ -35,7 +41,7 @@ const Login = ({ changeRoute }) => {
                         <AccountCircle />
                     </Grid>
                     <Grid item>
-                        <TextField label="Email/Username" />
+                        <TextField label="Username" onChange={e => setInputValues('username', e)}/>
                     </Grid>
                 </Grid>
                 <Grid className={textfield} container spacing={1} alignItems="flex-end">
@@ -46,12 +52,14 @@ const Login = ({ changeRoute }) => {
                         <TextField
                             label="Password"
                             type="password"
-                            autoComplete="current-password"/>
+                            autoComplete="current-password"
+                            onChange={e => setInputValues('password', e)}/>
                     </Grid>
                 </Grid>
                 <Button 
                     variant="outlined" 
-                    color="primary">
+                    color="primary"
+                    onClick={() => fetchUser(userData, 'login')}>
                     Accedi
                 </Button>
                 <div className={link}>

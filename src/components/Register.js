@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { CTX } from './Store.js';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,62 +24,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const initState = {
-    username: '',
-    email: '',
-    password: ''
-}
-
-const reducer = (state, action) => {
-    switch(action.type) {
-        case 'ON_CHANGE':
-            if (action.payload.username) {
-                return {
-                    ...state,
-                    username: action.payload.username
-                }
-            } else if (action.payload.email) {
-                return {
-                    ...state,
-                    email: action.payload.email
-                }
-            } else if (action.payload.password) {
-                return {
-                    ...state,
-                    password: action.payload.password
-                }
-            };
-            break;
-        default:
-            return state;
-    }
-}
-
-const registerUser = (user) => {
-    fetch('http://localhost:3001/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    })
-    .then(response => response.json())
-    .then(userEmail => console.log(userEmail))
-} 
 
 const Register = ({ changeRoute }) => {
     const classes = useStyles();
     const { root, textfield, link } = classes;
 
-    const [user, dispatch] = React.useReducer(reducer, initState);
-    const setInputValues = (inputType, e) => {
-        dispatch({
-            type: 'ON_CHANGE', 
-            payload: {
-                [inputType]: e.target.value
-            }
-        })
-    }
+    const { userData, setInputValues, fetchUser } = useContext(CTX);
 
     return(
         <Paper className={root} elevation={3}>
@@ -97,7 +50,7 @@ const Register = ({ changeRoute }) => {
             <Button 
                 variant="outlined" 
                 color="primary"
-                onClick={() => registerUser(user)}>
+                onClick={() => fetchUser(userData, 'register')}>
                 Registrati
             </Button>
             <div className={link}>
